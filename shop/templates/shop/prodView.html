@@ -1,0 +1,62 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %}{{product.product_name}} - My Awesome Cart{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <div class="row">
+    <div class="col-md-4">
+    <div class="row">
+        <img src="/media/{{product.image}}" width="350px" height="400px">
+    </div>
+       <!--  <div class="row">
+            <button onclick="buyNow()" class="btn btn-primary mx-4" id="buy" style='background-color: #415A77;'>Buy Now</button>
+            <button class="btn btn-primary" style='background-color: #415A77;'>Add to Cart</button>
+        </div> -->
+    </div>
+    <div class="col-md-8">
+        <br>
+        <input type="hidden" id="id" value={{product.id}}>
+        <h5 id="name" class="mx-4 mt-5">{{product.product_name}}</h5>
+        <p id="price" class="mx-4 mt-3"><b>Rs.{{product.price}}</b></p>
+        <p class="mx-4 mt-3">{{product.desc}}</p>
+        <button onclick="buyNow()" class="btn btn-primary mx-4" id="buy" style='background-color: #415A77;'>Buy Now</button>
+    </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+{% endblock %}
+{% block js %}
+<script>
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+}
+// document.getElementById("buy").onclick=function(){buyNow()};
+function buyNow(){
+    // const sid=document.getElementByTagName('id');
+    const sname=document.getElementById('name');
+    const sprice=document.getElementById('price');
+    var id="pr"+document.querySelector('#id').value;
+    var name=sname.innerText;
+    var price=sprice.innerText.slice(3,);
+    // console.log(id);
+    // console.log(name);
+    // console.log(price);
+    if(cart[id]!=undefined){
+        // console.log("true");
+        cart[id][0]=cart[id][0]+1;
+        
+    }
+    else{
+        qty=1;
+        cart[id]=[qty,name,price];
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    document.location="/shop/checkout/";
+}
+</script>
+{% endblock %}
